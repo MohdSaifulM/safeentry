@@ -17,7 +17,7 @@ const companySchema = new Schema({
   email: { type: String, required: true },
   business_reg: String,
   name: { type: String, required: true },
-  location: String,
+  location: { type: String, required: true },
   qrcode: String,
   visitors: [],
 });
