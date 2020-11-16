@@ -1,5 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 function Home({ companies }) {
   return (
@@ -9,6 +10,7 @@ function Home({ companies }) {
           <Card.Body>
             {company.name}
             <img src={company.qrcode} alt={company.slug} />
+            <NavLink to={`/company/${company.slug}`}>Add Visitor</NavLink>
           </Card.Body>
         </Card>
       ))}
