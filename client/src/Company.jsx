@@ -3,19 +3,25 @@ import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
-function Company() {
+function Company({ companies }) {
   const [visitor, setVisitor] = useState({});
   let { slug } = useParams();
 
   async function addVisitor() {
+    let findCompany = companies.find((el) => el.slug === slug);
+    // console.log(findCompany);
     try {
       let resp = await Axios.put(
-        `http://localhost:80/api/v1/company/${slug}`,
+        `http://localhost:80/api/v1/company/${findCompany._id}`,
         visitor
       );
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function changeHandler(e) {
+    setVisitor((visitor) => ({ ...visitor, [e.target.name]: e.target.value }));
   }
 
   return (
@@ -24,13 +30,15 @@ function Company() {
       <h1>Company Visitor Information</h1>
       <Container>
         <Form.Row className="mb-3">
-          <Form.Control placeholder="nric" />
+          <Form.Control placeholder="nric" onChange={changeHandler} />
         </Form.Row>
         <Form.Row className="mb-3">
-          <Form.Control placeholder="phone" />
+          <Form.Control onChange={changeHandler} placeholder="phone" />
         </Form.Row>
         <Form.Row className="mb-3">
-          <Button block>Check-In</Button>
+          <Button block onClick={addVisitor}>
+            Check-In
+          </Button>
         </Form.Row>
       </Container>
     </div>

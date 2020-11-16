@@ -26,7 +26,7 @@ function App() {
           <Home companies={companies} />
         </Route>
         <Route path="/company/:slug">
-          <Company />
+          <Company companies={companies} />
         </Route>
       </Switch>
     </BrowserRouter>
