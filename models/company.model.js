@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-/**
- * { 
-          nric : optional
-          passport: optional
-          phone: String
-          timeIn: Date
-          timeOut: Date
-          isNRIC: Boolean default true
-      }
- */
+
+const visitorSchema = new Schema({
+  nric: String,
+  passport: String,
+  phone: String,
+  timeIn: { type: Date, default: Date.now },
+  timeOut: Date,
+  isNRIC: { type: Boolean, default: true },
+});
+
 const companySchema = new Schema({
   firstname: String,
   lastname: String,
@@ -19,7 +19,7 @@ const companySchema = new Schema({
   name: { type: String, required: true },
   location: { type: String, required: true },
   qrcode: String,
-  visitors: [],
+  visitors: [visitorSchema],
 });
 
 const Company = mongoose.model("Company", companySchema);
