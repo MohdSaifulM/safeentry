@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/v1/company", require("./routes/company.routes"));
+app.use("/api/v1/auth", require("./routes/auth.routes"));
 
 app.get("*", (req, res) => {
   res.status(404).json({ message: "Tu es perdu?" });

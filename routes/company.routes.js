@@ -1,10 +1,11 @@
 const router = require("express").Router();
 require("dotenv").config();
-const { generateQR } = require("../lib/func");
+const { generateQR, checkToken } = require("../lib/func");
 const Company = require("../models/company.model");
 const { body, oneOf, validationResult } = require("express-validator");
 
-router.get("/", async (req, res) => {
+router.get("/", checkToken, async (req, res) => {
+  console.log("current signed in user", req.user);
   try {
     let companies = await Company.find();
     res.status(200).json({ companies });
