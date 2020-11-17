@@ -47,7 +47,7 @@ function Register() {
           />
         </Form.Row>
         <Form.Row className="mb-3">
-          <Button block>Check-In</Button>
+          <Button block>Register</Button>
         </Form.Row>
       </Container>
     </div>

@@ -5,6 +5,7 @@ import Company from "./Company";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./Auth/Login";
 import Register from "./Auth/Register";
+import { Button } from "react-bootstrap";
 
 function App() {
   const [companies, setCompanies] = useState([]);
@@ -21,8 +22,14 @@ function App() {
       console.log(error);
     }
   }
+
+  function logout() {
+    localStorage.removeItem("token");
+  }
+
   return (
     <BrowserRouter>
+      <Button onClick={logout}>Logout</Button>
       <Switch>
         <Route path="/" exact>
           <Home companies={companies} />

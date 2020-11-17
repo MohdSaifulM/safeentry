@@ -1,8 +1,25 @@
-import React from "react";
+import Axios from "axios";
+import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 function Login() {
-  function changeHandler(e) {}
+  const [user, setUser] = useState({});
+  function changeHandler(e) {
+    setUser((visitor) => ({ ...visitor, [e.target.name]: e.target.value }));
+  }
+
+  async function login() {
+    try {
+      let resp = await Axios.post(
+        "http://localhost:80/api/v1/auth/login",
+        user
+      );
+      console.log(resp.data);
+      localStorage.setItem("token", resp.data.token);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <div>
@@ -25,7 +42,9 @@ function Login() {
           />
         </Form.Row>
         <Form.Row className="mb-3">
-          <Button block>Check-In</Button>
+          <Button block onClick={login}>
+            Login
+          </Button>
         </Form.Row>
       </Container>
     </div>
