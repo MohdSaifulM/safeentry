@@ -2,7 +2,8 @@ import Axios from "axios";
 import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-function Login() {
+function Login({ setAuth }) {
+  console.log("here");
   const [user, setUser] = useState({});
   function changeHandler(e) {
     setUser((visitor) => ({ ...visitor, [e.target.name]: e.target.value }));
@@ -16,6 +17,7 @@ function Login() {
       );
       console.log(resp.data);
       localStorage.setItem("token", resp.data.token);
+      setAuth();
     } catch (e) {
       console.log(e);
     }
