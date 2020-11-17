@@ -1,31 +1,30 @@
 import Axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Container } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-function Login({ setAuth }) {
-  console.log("here");
+import { NavLink, Redirect, useLocation } from "react-router-dom";
+
+function Login({ setAuth, isAuth, loginFunc }) {
+  console.log(isAuth);
   const [user, setUser] = useState({});
+  const { state } = useLocation();
+  console.log(state);
+  //   useEffect(() => {}, [isAuth]);
   function changeHandler(e) {
     setUser((visitor) => ({ ...visitor, [e.target.name]: e.target.value }));
   }
 
   async function login() {
-    try {
-      let resp = await Axios.post(
-        "http://localhost:80/api/v1/auth/login",
-        user
-      );
-      console.log(resp.data);
-      localStorage.setItem("token", resp.data.token);
-      setAuth();
-    } catch (e) {
-      console.log(e);
-    }
+    loginFunc(user);
+  }
+
+  if (isAuth) {
+    return <Redirect to={"/"} />;
   }
 
   return (
     <div>
       <h1>Login</h1>
+
       <NavLink to="/register"> Not a user</NavLink>
       <Container>
         <Form.Row className="mb-3">
