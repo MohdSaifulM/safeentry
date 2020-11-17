@@ -16,7 +16,7 @@ function Company({ companies }) {
         visitor
       );
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   }
 
@@ -30,10 +30,25 @@ function Company({ companies }) {
       <h1>Company Visitor Information</h1>
       <Container>
         <Form.Row className="mb-3">
-          <Form.Control placeholder="nric" onChange={changeHandler} />
+          <Form.Control
+            placeholder="nric"
+            onChange={changeHandler}
+            name="nric"
+          />
         </Form.Row>
         <Form.Row className="mb-3">
-          <Form.Control onChange={changeHandler} placeholder="phone" />
+          <Form.Control
+            placeholder="passport"
+            onChange={changeHandler}
+            name="passport"
+          />
+        </Form.Row>
+        <Form.Row className="mb-3">
+          <Form.Control
+            onChange={changeHandler}
+            placeholder="phone"
+            name="phone"
+          />
         </Form.Row>
         <Form.Row className="mb-3">
           <Button block onClick={addVisitor}>

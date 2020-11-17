@@ -2,6 +2,17 @@ const router = require("express").Router();
 require("dotenv").config();
 const { generateQR } = require("../lib/func");
 const Company = require("../models/company.model");
+const { body, oneOf, validationResult } = require("express-validator");
+
+router.get("/", async (req, res) => {
+  try {
+    let companies = await Company.find();
+    res.status(200).json({ companies });
+  } catch (error) {
+    res.status(400).json({ message: "companies not found " });
+  }
+});
+
 /**
  * @method POST
  * @returns {}
@@ -14,7 +25,8 @@ router.post("/", async (req, res) => {
     let slug = name.split(" ").join("-");
     //is frontend app
     let qrcode = await generateQR(
-      `http://${process.env.IPADDRESS}/company/${slug}`
+      `http://${process.env.IPADDRESS}:3000/company/${slug}`
+      // `http://d7601ab400a5.ngrok.io/company/${slug}`
     );
 
     let company = new Company({
@@ -39,16 +51,6 @@ router.post("/", async (req, res) => {
       message: "something went wrong",
     });
   }
-  /**
-     *  firstname: String,
-  lastname: String,
-  slug: String,
-  email: { type: String, required: true },
-  business_reg: String,
-  name: { type: String, required: true },
-  location: { type: String, required: true },
-  qrcode: String,
-     */
 });
 
 router.get("/:id", async (req, res) => {
@@ -62,19 +64,42 @@ router.get("/:id", async (req, res) => {
   //   Company.findOne({ slug: req.params.companyname });
 });
 
-router.put("/:id", async (req, res) => {
-  try {
-    let { nric, passport, phone, isNRIC } = req.body;
+router.put(
+  "/:id",
+  [
+    body("phone")
+      .exists()
+      .withMessage("phone must exist")
+      .isMobilePhone("en-SG")
+      .withMessage("must be a valid SG number"),
+    oneOf([
+      body("passport").exists().withMessage("either passport or nric"),
+      // .notEmpty()
+      // // .isEmpty()
+      // .isLength({ min: 9, max: 9 })
+      // .withMessage("must be 9 chars"),
+      body("nric").exists().withMessage("either nric or passport"),
+    ]),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-    await Company.findByIdAndUpdate(req.params.id, {
-      $push: { visitors: { nric, passport, phone, isNRIC } },
-    });
+    try {
+      let { nric, passport, phone, isNRIC } = req.body;
 
-    res.status(200).json({ message: "Visitor added to company" });
-  } catch (error) {
-    res.status(400).json({ message: "trouble finding company data" });
+      // let c = await Company.findByIdAndUpdate(req.params.id, {
+      //   $push: { visitors: { nric, passport, phone, isNRIC } },
+      // });
+
+      res.status(200).json({ message: "Visitor added to company", s });
+    } catch (error) {
+      res.status(400).json({ message: "trouble finding company data" });
+    }
+    //   Company.findOne({ slug: req.params.companyname });
   }
-  //   Company.findOne({ slug: req.params.companyname });
-});
+);
 
 module.exports = router;
