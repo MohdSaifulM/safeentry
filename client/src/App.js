@@ -3,6 +3,8 @@ import Axios from "axios";
 import Home from "./Home";
 import Company from "./Company";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Login from "./Auth/Login";
+import Register from "./Auth/Register";
 
 function App() {
   const [companies, setCompanies] = useState([]);
@@ -27,6 +29,13 @@ function App() {
         </Route>
         <Route path="/company/:slug">
           <Company companies={companies} />
+        </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
+
+        <Route path="/register">
+          <Register />
         </Route>
       </Switch>
     </BrowserRouter>
